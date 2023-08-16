@@ -17,6 +17,7 @@ import 'package:ploff_and_kebab/src/domain/repositories/home/home_repository_imp
 import 'package:ploff_and_kebab/src/domain/repositories/register/register_repository.dart';
 import 'package:ploff_and_kebab/src/presentation/bloc/auth/auth_bloc.dart';
 import 'package:ploff_and_kebab/src/presentation/bloc/auth/register/register_bloc.dart';
+import 'package:ploff_and_kebab/src/presentation/bloc/main/home/banner/banner_bloc.dart';
 import 'package:ploff_and_kebab/src/presentation/bloc/main/main_bloc.dart';
 import 'package:ploff_and_kebab/src/presentation/bloc/splash/splash_bloc.dart';
 
@@ -68,11 +69,11 @@ Future<void> init() async {
           accessTokenGetter: () => localSource.accessToken,
           refreshTokenFunction: () async {
             await localSource.userClear();
-            await Navigator.pushNamedAndRemoveUntil(
-              rootNavigatorKey.currentContext!,
-              Routes.initial,
-              (route) => false,
-            );
+            // await Navigator.pushNamedAndRemoveUntil(
+            //   rootNavigatorKey.currentContext!,
+            //   Routes.initial,
+            //   (route) => false,
+            // );
           },
         ),
       );
@@ -85,6 +86,7 @@ Future<void> init() async {
   /// main
   mainFeature();
   homeFeature();
+  bannerFeature();
 
   /// auth
   authFeature();
@@ -108,6 +110,9 @@ void homeFeature() {
         networkInfo: sl(),
       ),
     );
+}
+void bannerFeature() {
+  sl.registerFactory<BannerBloc>(() => BannerBloc(sl()));
 }
 
 void registerFeature() {

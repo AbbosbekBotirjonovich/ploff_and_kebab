@@ -8,6 +8,7 @@ import 'package:ploff_and_kebab/src/data/models/home/category_product_model.dart
 import 'package:ploff_and_kebab/src/presentation/bloc/auth/auth_bloc.dart';
 import 'package:ploff_and_kebab/src/presentation/bloc/auth/confirm/confirm_code_bloc.dart';
 import 'package:ploff_and_kebab/src/presentation/bloc/auth/register/register_bloc.dart';
+import 'package:ploff_and_kebab/src/presentation/bloc/main/home/banner/banner_bloc.dart';
 import 'package:ploff_and_kebab/src/presentation/bloc/main/home/home_bloc.dart';
 import 'package:ploff_and_kebab/src/presentation/pages/add_address/address_page.dart';
 import 'package:ploff_and_kebab/src/presentation/pages/auth/auth_page.dart';
@@ -30,8 +31,7 @@ import '../../presentation/bloc/splash/splash_bloc.dart';
 part 'name_routes.dart';
 
 final GlobalKey<NavigatorState> rootNavigatorKey = GlobalKey<NavigatorState>();
-final GlobalKey<ScaffoldMessengerState> scaffoldMessengerKey =
-    GlobalKey<ScaffoldMessengerState>();
+
 
 final localSource = sl<LocalSource>();
 
@@ -57,6 +57,7 @@ sealed class AppRoutes {
           builder: (_) => MultiBlocProvider(
             providers: [
               BlocProvider(create: (_) => sl<HomeBloc>()),
+              BlocProvider(create: (_)=> sl<BannerBloc>())
             ],
             child: const MainPage(),
           ),

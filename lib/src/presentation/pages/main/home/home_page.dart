@@ -28,16 +28,21 @@ class _HomePageState extends State<HomePage>
                 product: state.product,
               );
             }
-            if (state is SuccessBannerState) {
-              return HomePageView(banner: state.banner);
-            }
-            if(state is HomeErrorState){
-              return  Center(
+            if (state is HomeErrorState) {
+              return Center(
                 child: Text(state.error),
               );
             }
-            return const Center(child: CircularProgressIndicator.adaptive(),);
+            return const Center(
+              child: CircularProgressIndicator.adaptive(),
+            );
           },
+        ),
+        floatingActionButton: FloatingActionButton(
+          onPressed: () {
+            initEvents();
+          },
+          child: const Icon(Icons.sync),
         ),
       );
 }

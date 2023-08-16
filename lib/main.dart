@@ -86,7 +86,7 @@ class MainApp extends StatelessWidget {
                       /// title
                       debugShowCheckedModeBanner: false,
                       navigatorKey: rootNavigatorKey,
-                      scaffoldMessengerKey: scaffoldMessengerKey,
+                      // scaffoldMessengerKey: scaffoldMessengerKey,
 
                       /// theme style
                       theme: lightTheme,

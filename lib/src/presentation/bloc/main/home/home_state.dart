@@ -26,14 +26,6 @@ class SuccessMobileAppState extends HomeState {
   @override
   List<Object?> get props => [mobile];
 }
-class SuccessBannerState extends HomeState {
-  final BannerModel banner;
-
-  const SuccessBannerState({required this.banner});
-
-  @override
-  List<Object?> get props => [banner];
-}
 
 class SuccessCategoryProduct extends HomeState {
   final CategoryProductModel product;

@@ -10,10 +10,6 @@ class GetMobileApp extends HomeEvent{
   
 }
 
-class GetBanner extends HomeEvent{
-
-}
-
 class GetCategoryEvent extends HomeEvent{
   
 }
