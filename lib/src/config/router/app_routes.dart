@@ -8,7 +8,6 @@ import 'package:ploff_and_kebab/src/data/models/home/category_product_model.dart
 import 'package:ploff_and_kebab/src/presentation/bloc/auth/auth_bloc.dart';
 import 'package:ploff_and_kebab/src/presentation/bloc/auth/confirm/confirm_code_bloc.dart';
 import 'package:ploff_and_kebab/src/presentation/bloc/auth/register/register_bloc.dart';
-import 'package:ploff_and_kebab/src/presentation/bloc/main/home/banner/banner_bloc.dart';
 import 'package:ploff_and_kebab/src/presentation/bloc/main/home/home_bloc.dart';
 import 'package:ploff_and_kebab/src/presentation/pages/add_address/address_page.dart';
 import 'package:ploff_and_kebab/src/presentation/pages/auth/auth_page.dart';
@@ -21,7 +20,6 @@ import 'package:ploff_and_kebab/src/presentation/pages/main/main_page.dart';
 import 'package:ploff_and_kebab/src/presentation/pages/main/orders/pages/order_item/order_item_page.dart';
 import 'package:ploff_and_kebab/src/presentation/pages/main/profile/settings/settings_page.dart';
 import 'package:ploff_and_kebab/src/presentation/pages/place_an_order/place_an_order_page.dart';
-import 'package:ploff_and_kebab/src/presentation/pages/product_detail/product_detail_page.dart';
 import 'package:ploff_and_kebab/src/presentation/pages/splash/splash_page.dart';
 
 import '../../data/source/local_source.dart';
@@ -31,7 +29,6 @@ import '../../presentation/bloc/splash/splash_bloc.dart';
 part 'name_routes.dart';
 
 final GlobalKey<NavigatorState> rootNavigatorKey = GlobalKey<NavigatorState>();
-
 
 final localSource = sl<LocalSource>();
 
@@ -56,8 +53,11 @@ sealed class AppRoutes {
         return FadePageRoute(
           builder: (_) => MultiBlocProvider(
             providers: [
-              BlocProvider(create: (_) => sl<HomeBloc>()),
-              BlocProvider(create: (_)=> sl<BannerBloc>())
+              BlocProvider(
+                create: (_) => sl<HomeBloc>()
+                  ..add(GetMobileApp())
+                  ..add(GetCategoryEvent()),
+              ),
             ],
             child: const MainPage(),
           ),

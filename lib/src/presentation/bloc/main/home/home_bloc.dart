@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:ploff_and_kebab/src/data/models/home/banner.dart';
 import 'package:ploff_and_kebab/src/data/models/home/category_product_model.dart';
 
 import '../../../../data/models/home/mobile_app_model.dart';
@@ -33,16 +34,30 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
 
   Future<void> _getCategory(
       GetCategoryEvent event, Emitter<HomeState> emit) async {
-    final result = await repository.getCategory();
-    result.fold(
-      (left) => emit(
-        HomeErrorState(
-          error: left.toString(),
-        ),
-      ),
-      (right) => emit(
-        SuccessCategoryProduct(product: right),
-      ),
-    );
+    final resultCategory = await repository.getCategory();
+    final resultBanner = await repository.getBanner();
+    resultCategory.fold(
+        (left) => emit(
+              HomeErrorState(
+                error: left.toString(),
+              ),
+            ),
+        (right) => {
+              if (resultBanner.isRight)
+                {
+                  emit(
+                    SuccessDataState(
+                        product: right, banner: resultBanner.right),
+                  )
+                }
+              else
+                {
+                  emit(
+                    HomeErrorState(
+                      error: resultBanner.left.toString(),
+                    ),
+                  )
+                }
+            });
   }
 }

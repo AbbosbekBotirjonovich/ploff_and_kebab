@@ -23,9 +23,11 @@ class _HomePageState extends State<HomePage>
                 child: CircularProgressIndicator.adaptive(),
               );
             }
-            if (state is SuccessCategoryProduct) {
+            if (state is SuccessDataState) {
               return HomePageView(
                 product: state.product,
+                bloc: bloc,
+                banner: state.banner,
               );
             }
             if (state is HomeErrorState) {
@@ -37,12 +39,6 @@ class _HomePageState extends State<HomePage>
               child: CircularProgressIndicator.adaptive(),
             );
           },
-        ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: () {
-            initEvents();
-          },
-          child: const Icon(Icons.sync),
         ),
       );
 }

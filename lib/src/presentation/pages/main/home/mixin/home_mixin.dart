@@ -6,12 +6,7 @@ mixin HomeMixin on State<HomePage> {
   @override
   void initState() {
     bloc = context.read<HomeBloc>();
-    initEvents();
     super.initState();
-  }
-  void initEvents(){
-    bloc.add(GetMobileApp());
-    bloc.add(GetCategoryEvent());
   }
 
   @override

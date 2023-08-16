@@ -27,6 +27,7 @@ class Category {
   Description title;
   String orderNo;
   bool active;
+  bool isChecked;
   List<Product> products;
 
   Category({
@@ -39,6 +40,7 @@ class Category {
     required this.orderNo,
     required this.active,
     required this.products,
+    this.isChecked = false
   });
 
   factory Category.fromJson(Map<String, dynamic> json) => Category(

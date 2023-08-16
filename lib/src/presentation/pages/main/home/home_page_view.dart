@@ -1,48 +1,56 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:ploff_and_kebab/src/config/theme/my_text_style.dart';
+import 'package:ploff_and_kebab/src/data/models/home/banner.dart';
 import 'package:ploff_and_kebab/src/data/models/home/category_product_model.dart';
 import 'package:ploff_and_kebab/src/presentation/pages/main/home/widgets/category_with_products.dart';
 import 'package:ploff_and_kebab/src/presentation/pages/main/home/widgets/home_banner.dart';
 import 'package:ploff_and_kebab/src/presentation/pages/main/home/widgets/home_header_widget.dart';
 
+import '../../../../config/router/app_routes.dart';
 import '../../../../config/theme/app_color.dart';
-import '../../../../injector_container.dart';
-import '../../../bloc/main/home/banner/banner_bloc.dart';
+import '../../../bloc/main/home/home_bloc.dart';
 import '../../../components/bottom_sheet/custom_bottom_sheet.dart';
 import '../../../components/radio_button/custom_radio_button.dart';
 
 class HomePageView extends StatefulWidget {
-  const HomePageView({super.key, required this.product});
+  const HomePageView(
+      {super.key,
+      required this.product,
+      required this.bloc,
+      required this.banner});
 
   final CategoryProductModel product;
+  final BannerModel banner;
+  final HomeBloc bloc;
 
   @override
   State<HomePageView> createState() => _HomePageViewState();
 }
 
 class _HomePageViewState extends State<HomePageView> {
-  late BannerBloc bloc;
-
   @override
   void initState() {
-    bloc = sl<BannerBloc>();
-    bloc.add(GetBanner());
     super.initState();
+  }
+
+  Future<void> _refresh() async {
+    widget.bloc.add(GetCategoryEvent());
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider<BannerBloc>(
-      create:(context)=> bloc,
-      child: Scaffold(
-        backgroundColor: Theme.of(context).colorScheme.surface,
-        body: SafeArea(
-          child: Column(
-            children: [
-              HomeHeaderWidget(
-                callback: () {
+    return Scaffold(
+      backgroundColor: Theme.of(context).colorScheme.surface,
+      body: SafeArea(
+        child: Column(
+          children: [
+            HomeHeaderWidget(
+              callback: () {
+                if (!localSource.hasProfile) {
+                  Navigator.pushNamed(context, Routes.auth);
+                  return;
+                } else {
                   modalBottomSheet(
                     context: context,
                     widget: Container(
@@ -98,30 +106,22 @@ class _HomePageViewState extends State<HomePageView> {
                       ),
                     ),
                   );
+                }
+              },
+              category: widget.product.categories,
+            ),
+            16.verticalSpace,
+            Expanded(
+              child: RefreshIndicator(
+                onRefresh: () {
+                  return _refresh();
                 },
-              ),
-              16.verticalSpace,
-              Expanded(
                 child: SingleChildScrollView(
                   physics: const BouncingScrollPhysics(),
                   child: Column(
                     children: [
-                      BlocBuilder<BannerBloc, BannerState>(
-                        builder: (context, state) {
-                          if (state is BannerInitial) {
-                            return const Center(
-                              child: CircularProgressIndicator.adaptive(),
-                            );
-                          }
-                          if (state is SuccessBannerState) {
-                            return HomeBannerWidget(
-                              banner: state.banner,
-                            );
-                          }
-                          return const Center(
-                            child: CircularProgressIndicator.adaptive(),
-                          );
-                        },
+                      HomeBannerWidget(
+                        banner: widget.banner,
                       ),
                       16.verticalSpace,
                       CategoryWithProduct(
@@ -130,9 +130,9 @@ class _HomePageViewState extends State<HomePageView> {
                     ],
                   ),
                 ),
-              )
-            ],
-          ),
+              ),
+            )
+          ],
         ),
       ),
     );

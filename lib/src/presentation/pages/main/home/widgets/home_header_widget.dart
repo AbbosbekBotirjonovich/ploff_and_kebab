@@ -5,9 +5,15 @@ import 'package:ploff_and_kebab/src/presentation/pages/main/home/widgets/custom_
 import 'package:ploff_and_kebab/src/presentation/pages/main/home/widgets/home_app_bar.dart';
 import 'package:ploff_and_kebab/src/presentation/pages/main/home/widgets/home_category_widget.dart';
 
+import '../../../../../data/models/home/category_product_model.dart';
+
 class HomeHeaderWidget extends StatefulWidget {
-  const HomeHeaderWidget({super.key, required this.callback});
+  const HomeHeaderWidget(
+      {super.key, required this.callback, required this.category});
+
   final VoidCallback callback;
+  final List<Category> category;
+
   @override
   State<HomeHeaderWidget> createState() => _HomeHeaderWidgetState();
 }
@@ -31,7 +37,9 @@ class _HomeHeaderWidgetState extends State<HomeHeaderWidget> {
             SizedBox(
               width: double.infinity,
               height: 44.h,
-              child: HomeCategoryWidget(),
+              child: HomeCategoryWidget(
+                category: widget.category,
+              ),
             )
           ],
         ),

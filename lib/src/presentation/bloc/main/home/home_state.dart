@@ -36,6 +36,19 @@ class SuccessCategoryProduct extends HomeState {
   List<Object?> get props => [product];
 }
 
+class SuccessDataState extends HomeState {
+  final CategoryProductModel product;
+  final BannerModel banner;
+
+  const SuccessDataState({required this.product, required this.banner});
+
+  @override
+  List<Object?> get props => [
+        product,
+        banner,
+      ];
+}
+
 class HomeErrorState extends HomeState {
   final String error;
 
