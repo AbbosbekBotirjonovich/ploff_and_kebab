@@ -1,9 +1,11 @@
 import 'package:equatable/equatable.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ploff_and_kebab/src/data/models/home/banner.dart';
 import 'package:ploff_and_kebab/src/data/models/home/category_product_model.dart';
 
 import '../../../../data/models/home/mobile_app_model.dart';
+import '../../../../data/models/home/product_search_model.dart';
 import '../../../../domain/repositories/home/home_repository.dart';
 
 part 'home_event.dart';
@@ -13,9 +15,14 @@ part 'home_state.dart';
 class HomeBloc extends Bloc<HomeEvent, HomeState> {
   final HomeRepository repository;
 
+  final isNoResult = ValueNotifier<bool>(false);
+  final isHasCancel = ValueNotifier<bool>(false);
+
   HomeBloc(this.repository) : super(const HomeInitialState()) {
     on<GetMobileApp>(_getMobileApp);
     on<GetCategoryEvent>(_getCategory);
+    on<GetSearchEvent>(_getSearch);
+    on<GetClearSearchData>(clearData);
   }
 
   Future<void> _getMobileApp(
@@ -37,27 +44,50 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     final resultCategory = await repository.getCategory();
     final resultBanner = await repository.getBanner();
     resultCategory.fold(
-        (left) => emit(
+      (left) => emit(
+        HomeErrorState(
+          error: left.toString(),
+        ),
+      ),
+      (right) => {
+        if (resultBanner.isRight)
+          {
+            emit(
+              SuccessDataState(product: right, banner: resultBanner.right),
+            )
+          }
+        else
+          {
+            emit(
               HomeErrorState(
-                error: left.toString(),
+                error: resultBanner.left.toString(),
               ),
-            ),
-        (right) => {
-              if (resultBanner.isRight)
-                {
-                  emit(
-                    SuccessDataState(
-                        product: right, banner: resultBanner.right),
-                  )
-                }
-              else
-                {
-                  emit(
-                    HomeErrorState(
-                      error: resultBanner.left.toString(),
-                    ),
-                  )
-                }
-            });
+            )
+          }
+      },
+    );
+  }
+
+  Future<void> _getSearch(GetSearchEvent event, Emitter<HomeState> emit) async {
+    final result = await repository.getProductSearch(event.productName);
+
+    result.fold(
+      (left) => emit(
+        HomeErrorState(
+          error: left.toString(),
+        ),
+      ),
+      (right) {
+        isNoResult.value = right.count.isEmpty;
+        emit(
+          SuccessSearchState(searchProduct: right),
+        );
+      },
+    );
+  }
+
+  Future<void> clearData(GetClearSearchData event, Emitter<HomeState> emit) async {
+    ProductSearchModel res = ProductSearchModel(products: [], count: "");
+    emit(SuccessSearchState(searchProduct: res));
   }
 }

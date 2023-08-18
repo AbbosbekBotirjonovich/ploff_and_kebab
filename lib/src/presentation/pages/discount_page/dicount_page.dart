@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:ploff_and_kebab/src/config/theme/app_color.dart';
@@ -55,11 +56,13 @@ class DiscountPage extends StatelessWidget {
                 height: 150.h,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(16.r),
-                  image: DecorationImage(
-                    image: NetworkImage(banner.image),
-                    fit: BoxFit.cover,
-                  ),
                 ),
+                child: ClipRRect(
+                    borderRadius: BorderRadius.circular(16.r),
+                    child: CachedNetworkImage(
+                      imageUrl: banner.image,
+                      fit: BoxFit.cover,
+                    )),
               ),
             ),
             Padding(

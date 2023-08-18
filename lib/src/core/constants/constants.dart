@@ -6,6 +6,8 @@ sealed class Constants {
   /// test
   static const baseUrl = 'https://test.customer.api.delever.uz';
   static const authUrl = 'https://api.auth.u-code.io';
+  static const String shipper = "d4b1658f-3271-4973-8591-98a82939a664";
+  static const String imgUrl = "https://test.cdn.delever.uz/delever/";
 
   /// id
   static const String projectId = 'a4dc1f1c-d20f-4c1a-abf5-b819076604bc';
@@ -30,6 +32,11 @@ sealed class Urls {
   static const String mobileApp = '/v1/mobile_app/ploff_kebab';
   static const String banner = '/v1/banner';
   static const String categoryWithProduct = "/v2/category-with-products";
+  static const String searchProduct = "/v2/product-non-origin-modifier";
+  static const String simple = "/v2/product";
+  static const String origin = "variants";
+  static const String combo = "/v2/combo";
+  static const String modifier = "/v2/modifier";
   
 }
 

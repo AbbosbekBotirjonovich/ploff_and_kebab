@@ -8,11 +8,10 @@ import 'package:ploff_and_kebab/src/core/platform/network_info.dart';
 import 'package:ploff_and_kebab/src/data/models/home/banner.dart';
 import 'package:ploff_and_kebab/src/data/models/home/category_product_model.dart';
 import 'package:ploff_and_kebab/src/data/models/home/mobile_app_model.dart';
+import 'package:ploff_and_kebab/src/data/models/home/product_search_model.dart';
 import 'package:ploff_and_kebab/src/domain/network/failure.dart';
 import 'package:ploff_and_kebab/src/domain/network/server_error.dart';
 import 'package:ploff_and_kebab/src/domain/repositories/home/home_repository.dart';
-import 'package:ploff_and_kebab/src/presentation/pages/main/home/widgets/category_with_products.dart';
-
 
 class HomeRepositoryImpl implements HomeRepository {
   final Dio dio;
@@ -55,7 +54,7 @@ class HomeRepositoryImpl implements HomeRepository {
         final Response response = await dio.get(
           Constants.baseUrl + Urls.banner,
           options: Options(headers: {
-            'Shipper': AppKeys.shipper,
+            'Shipper': Constants.shipper,
           }),
           queryParameters: {
             'page': 1,
@@ -84,13 +83,13 @@ class HomeRepositoryImpl implements HomeRepository {
   }
 
   @override
-  Future<Either<Failure, CategoryProductModel>> getCategory() async{
+  Future<Either<Failure, CategoryProductModel>> getCategory() async {
     if (await networkInfo.isConnected) {
       try {
         final Response response = await dio.get(
           Constants.baseUrl + Urls.categoryWithProduct,
           options: Options(headers: {
-            'Shipper': AppKeys.shipper,
+            'Shipper': Constants.shipper,
           }),
           queryParameters: {
             'page': 1,
@@ -99,6 +98,39 @@ class HomeRepositoryImpl implements HomeRepository {
         );
         return Right(
           CategoryProductModel.fromJson(response.data),
+        );
+      } on DioException catch (error, stacktrace) {
+        log('Exception occurred: $error stacktrace: $stacktrace');
+        return Left(
+          ServerError.withDioError(error: error).failure,
+        );
+      } on Exception catch (error, stacktrace) {
+        log('Exception occurred: $error stacktrace: $stacktrace');
+        return Left(
+          ServerError.withError(message: error.toString()).failure,
+        );
+      }
+    } else {
+      return const Left(
+        ServerFailure(message: 'No Internet Connection'),
+      );
+    }
+  }
+
+  @override
+  Future<Either<Failure, ProductSearchModel>> getProductSearch(
+      String product) async {
+    if (await networkInfo.isConnected) {
+      try {
+        final Response response = await dio.get(
+          Constants.baseUrl + Urls.searchProduct,
+          options: Options(headers: {
+            'Shipper': Constants.shipper,
+          }),
+          queryParameters: {'page': 1, 'limit': 100, 'search': product},
+        );
+        return Right(
+          ProductSearchModel.fromJson(response.data),
         );
       } on DioException catch (error, stacktrace) {
         log('Exception occurred: $error stacktrace: $stacktrace');

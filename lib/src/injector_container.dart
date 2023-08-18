@@ -12,17 +12,23 @@ import 'package:path_provider/path_provider.dart';
 import 'package:ploff_and_kebab/src/config/router/app_routes.dart';
 import 'package:ploff_and_kebab/src/data/source/local_source.dart';
 import 'package:ploff_and_kebab/src/domain/repositories/auth/auth_repository.dart';
+import 'package:ploff_and_kebab/src/domain/repositories/detail/product_detail_repository.dart';
+import 'package:ploff_and_kebab/src/domain/repositories/detail/product_detail_repository_impl.dart';
 import 'package:ploff_and_kebab/src/domain/repositories/home/home_repository.dart';
 import 'package:ploff_and_kebab/src/domain/repositories/home/home_repository_impl.dart';
 import 'package:ploff_and_kebab/src/domain/repositories/register/register_repository.dart';
 import 'package:ploff_and_kebab/src/presentation/bloc/auth/auth_bloc.dart';
 import 'package:ploff_and_kebab/src/presentation/bloc/auth/register/register_bloc.dart';
+import 'package:ploff_and_kebab/src/presentation/bloc/detail/combo/combo_product_bloc.dart';
+import 'package:ploff_and_kebab/src/presentation/bloc/detail/modifier/modifier_product_bloc.dart';
+import 'package:ploff_and_kebab/src/presentation/bloc/detail/simple/simple_product_bloc.dart';
 import 'package:ploff_and_kebab/src/presentation/bloc/main/main_bloc.dart';
 import 'package:ploff_and_kebab/src/presentation/bloc/splash/splash_bloc.dart';
 
 import 'core/constants/constants.dart';
 import 'core/platform/network_info.dart';
 import 'presentation/bloc/auth/confirm/confirm_code_bloc.dart';
+import 'presentation/bloc/detail/origin/origin_product_bloc.dart';
 import 'presentation/bloc/main/home/home_bloc.dart';
 
 final sl = GetIt.instance;
@@ -86,6 +92,9 @@ Future<void> init() async {
   mainFeature();
   homeFeature();
 
+  ///detail
+  detailFeature();
+
   /// auth
   authFeature();
 
@@ -110,6 +119,35 @@ void homeFeature() {
     );
 }
 
+void detailFeature() {
+  sl
+    ..registerFactory<SimpleProductBloc>(
+      () => SimpleProductBloc(
+        sl(),
+      ),
+    )
+    ..registerLazySingleton<ProductDetailRepository>(
+      () => ProductDetailRepositoryImpl(
+        dio: sl(),
+        networkInfo: sl(),
+      ),
+    );
+  sl.registerFactory<OriginProductBloc>(
+    () => OriginProductBloc(
+      sl(),
+    ),
+  );
+  sl.registerFactory<ComboProductBloc>(
+    () => ComboProductBloc(
+      sl(),
+    ),
+  );
+  sl.registerFactory<ModifierProductBloc>(
+    () => ModifierProductBloc(
+      sl(),
+    ),
+  );
+}
 
 void registerFeature() {
   sl

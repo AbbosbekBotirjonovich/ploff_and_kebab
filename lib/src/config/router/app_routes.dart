@@ -8,6 +8,9 @@ import 'package:ploff_and_kebab/src/data/models/home/category_product_model.dart
 import 'package:ploff_and_kebab/src/presentation/bloc/auth/auth_bloc.dart';
 import 'package:ploff_and_kebab/src/presentation/bloc/auth/confirm/confirm_code_bloc.dart';
 import 'package:ploff_and_kebab/src/presentation/bloc/auth/register/register_bloc.dart';
+import 'package:ploff_and_kebab/src/presentation/bloc/detail/combo/combo_product_bloc.dart';
+import 'package:ploff_and_kebab/src/presentation/bloc/detail/origin/origin_product_bloc.dart';
+import 'package:ploff_and_kebab/src/presentation/bloc/detail/simple/simple_product_bloc.dart';
 import 'package:ploff_and_kebab/src/presentation/bloc/main/home/home_bloc.dart';
 import 'package:ploff_and_kebab/src/presentation/pages/add_address/address_page.dart';
 import 'package:ploff_and_kebab/src/presentation/pages/auth/auth_page.dart';
@@ -20,6 +23,9 @@ import 'package:ploff_and_kebab/src/presentation/pages/main/main_page.dart';
 import 'package:ploff_and_kebab/src/presentation/pages/main/orders/pages/order_item/order_item_page.dart';
 import 'package:ploff_and_kebab/src/presentation/pages/main/profile/settings/settings_page.dart';
 import 'package:ploff_and_kebab/src/presentation/pages/place_an_order/place_an_order_page.dart';
+import 'package:ploff_and_kebab/src/presentation/pages/product_detail/combo/combo_product_page.dart';
+import 'package:ploff_and_kebab/src/presentation/pages/product_detail/origin/origin_product_page.dart';
+import 'package:ploff_and_kebab/src/presentation/pages/product_detail/simple/simple_product_page.dart';
 import 'package:ploff_and_kebab/src/presentation/pages/splash/splash_page.dart';
 
 import '../../data/source/local_source.dart';
@@ -44,23 +50,21 @@ sealed class AppRoutes {
     switch (settings.name) {
       case Routes.initial:
         return CupertinoPageRoute(
-          builder: (_) => BlocProvider(
-            create: (_) => sl<SplashBloc>(),
-            child: const SplashPage(),
-          ),
+          builder: (_) =>
+              BlocProvider(
+                create: (_) => sl<SplashBloc>(),
+                child: const SplashPage(),
+              ),
         );
       case Routes.main:
         return FadePageRoute(
-          builder: (_) => MultiBlocProvider(
-            providers: [
+          builder: (_) =>
               BlocProvider(
-                create: (_) => sl<HomeBloc>()
-                  ..add(GetMobileApp())
-                  ..add(GetCategoryEvent()),
+                create: (_) =>
+                sl<HomeBloc>()
+                  ..add(GetMobileApp())..add(GetCategoryEvent()),
+                child: const MainPage(),
               ),
-            ],
-            child: const MainPage(),
-          ),
         );
       case Routes.settings:
         return MaterialPageRoute(builder: (_) => const SettingsPage());
@@ -69,67 +73,81 @@ sealed class AppRoutes {
           builder: (_) => const InternetConnectionPage(),
         );
       case Routes.auth:
-        return MaterialPageRoute(
-          builder: (_) => BlocProvider(
-            create: (_) => sl<AuthBloc>(),
-            child: const AuthPage(),
-          ),
+        return CupertinoPageRoute(
+          builder: (_) =>
+              BlocProvider(
+                create: (_) => sl<AuthBloc>(),
+                child: const AuthPage(),
+              ),
         );
       case Routes.confirmCode:
         final AuthSuccessState state = settings.arguments! as AuthSuccessState;
-        return MaterialPageRoute(
-          builder: (_) => BlocProvider(
-            create: (_) => sl<ConfirmCodeBloc>(),
-            child: ConfirmCodePage(
-              state: state,
-            ),
-          ),
+        return CupertinoPageRoute(
+          builder: (_) =>
+              BlocProvider(
+                create: (_) => sl<ConfirmCodeBloc>(),
+                child: ConfirmCodePage(
+                  state: state,
+                ),
+              ),
         );
       case Routes.register:
-        return MaterialPageRoute(
-          builder: (_) => BlocProvider(
-            create: (_) => sl<RegisterBloc>(),
-            child: const RegisterPage(),
-          ),
+        return CupertinoPageRoute(
+          builder: (_) =>
+              BlocProvider(
+                create: (_) => sl<RegisterBloc>(),
+                child: const RegisterPage(),
+              ),
         );
       case Routes.discount:
         final BannerElement banner = settings.arguments as BannerElement;
-        return PageRouteBuilder(
+        return CupertinoPageRoute(
           settings: settings,
-          pageBuilder: (_, __, ___) => DiscountPage(
-            banner: banner,
-          ),
-          transitionDuration: const Duration(microseconds: 400),
-          transitionsBuilder: (_, animation, __, child) {
-            return SlideTransition(
-              position: Tween<Offset>(
-                begin: const Offset(1, 0),
-                end: Offset.zero,
-              ).animate(animation),
-              child: child,
+          builder: (BuildContext context) {
+            return DiscountPage(banner: banner);
+          },
+        );
+      case Routes.simpleProduct:
+        final Product product = settings.arguments as Product;
+        return CupertinoPageRoute(
+          settings: settings,
+          builder: (BuildContext context) {
+            return BlocProvider(
+              create: (context) => sl<SimpleProductBloc>(),
+              child: SimpleProductPage(
+                product: product,
+              ),
             );
           },
         );
-      // case Routes.productDetail:
-      //   final Category product =
-      //       settings.arguments as Category;
-      //   return PageRouteBuilder(
-      //     settings: settings,
-      //     pageBuilder: (_, __, ___) => ProductDetailPage(
-      //       product: product,
-      //     ),
-      //     transitionDuration: const Duration(milliseconds: 400),
-      //     transitionsBuilder: (_, animation, __, child) {
-      //       return SlideTransition(
-      //         position: Tween<Offset>(
-      //           begin: const Offset(1, 0),
-      //           end: Offset.zero,
-      //         ).animate(animation),
-      //         child: child,
-      //       );
-      //     },
-      //   );
-
+      case Routes.originProduct:
+        final Product product = settings.arguments as Product;
+        return CupertinoPageRoute(
+          settings: settings,
+          builder: (BuildContext context) {
+            return BlocProvider(
+              create: (context) => sl<OriginProductBloc>(),
+              child: OriginProductPage(
+                product: product,
+              ),
+            );
+          },
+        );
+      case Routes.comboProduct:
+        final Product product = settings.arguments as Product;
+        return CupertinoPageRoute(
+          settings: settings,
+          builder: (BuildContext context) {
+            return BlocProvider(
+              create: (context) =>
+              sl<ComboProductBloc>()
+                ..add(GetComboProductEvent(id: product.id)),
+              child: ComboProductPage(
+                product: product,
+              ),
+            );
+          },
+        );
       case Routes.addAddress:
         return PageRouteBuilder(
           settings: settings,
@@ -185,9 +203,10 @@ sealed class AppRoutes {
       print('Navigate to: $settings');
     }
     return MaterialPageRoute(
-      builder: (_) => ErrorPage(
-        settings: settings,
-      ),
+      builder: (_) =>
+          ErrorPage(
+            settings: settings,
+          ),
     );
   }
 }
@@ -195,23 +214,19 @@ sealed class AppRoutes {
 class FadePageRoute<T> extends PageRouteBuilder<T> {
   FadePageRoute({required this.builder})
       : super(
-          pageBuilder: (
-            context,
-            animation,
-            secondaryAnimation,
-          ) =>
-              builder(context),
-          transitionsBuilder: (
-            context,
-            animation,
-            secondaryAnimation,
-            child,
-          ) =>
-              FadeTransition(
-            opacity: animation,
-            child: child,
-          ),
-        );
+    pageBuilder: (context,
+        animation,
+        secondaryAnimation,) =>
+        builder(context),
+    transitionsBuilder: (context,
+        animation,
+        secondaryAnimation,
+        child,) =>
+        FadeTransition(
+          opacity: animation,
+          child: child,
+        ),
+  );
   final WidgetBuilder builder;
 
   @override

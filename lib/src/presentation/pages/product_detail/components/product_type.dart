@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:ploff_and_kebab/src/config/theme/app_color.dart';
+import 'package:ploff_and_kebab/src/config/theme/app_icons.dart';
 import 'package:ploff_and_kebab/src/config/theme/my_text_style.dart';
 import 'package:ploff_and_kebab/src/presentation/components/radio_button/custom_radio_button.dart';
+
+import '../../../../data/models/detail/combo_product_model.dart';
 
 // ignore: must_be_immutable
 class ProductTypeWidget extends StatelessWidget {
@@ -13,7 +16,7 @@ class ProductTypeWidget extends StatelessWidget {
   });
 
   final String title;
-  final List<String> list;
+  final List<Variant> list;
 
   var productType = ValueNotifier<int>(0);
 
@@ -49,8 +52,8 @@ class ProductTypeWidget extends StatelessWidget {
                     (index) => InkWell(
                       onTap: () => productType.value = index,
                       child: CustomRadioButton(
-                        isActive: productType.value == index,
-                        title: list[index],
+                        icon: AppIcons.icRadioActive,
+                        title: list[index].title.uz,
                       ),
                     ),
                   )

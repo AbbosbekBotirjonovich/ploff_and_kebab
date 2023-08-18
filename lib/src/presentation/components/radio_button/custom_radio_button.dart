@@ -8,12 +8,12 @@ import 'package:ploff_and_kebab/src/config/theme/my_text_style.dart';
 class CustomRadioButton extends StatelessWidget {
   const CustomRadioButton({
     super.key,
-    required this.isActive,
+    required this.icon,
     required this.title,
     this.subtitle,
   });
 
-  final bool isActive;
+  final String icon;
   final String title;
   final String? subtitle;
 
@@ -24,7 +24,7 @@ class CustomRadioButton extends StatelessWidget {
       child: Row(
         children: [
           SvgPicture.asset(
-            isActive ? AppIcons.icRadioActive : AppIcons.icRadioInActive,
+            icon,
             width: 24.w,
             height: 24.h,
           ),

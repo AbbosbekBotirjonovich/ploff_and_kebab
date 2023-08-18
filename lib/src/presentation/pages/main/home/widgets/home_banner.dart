@@ -1,15 +1,15 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:ploff_and_kebab/src/config/router/app_routes.dart';
 import 'package:ploff_and_kebab/src/config/theme/app_color.dart';
-import 'package:ploff_and_kebab/src/config/theme/app_images.dart';
 import 'package:ploff_and_kebab/src/data/models/home/banner.dart';
 
 // ignore: must_be_immutable
 class HomeBannerWidget extends StatelessWidget {
   HomeBannerWidget({super.key, required this.banner});
 
-  final BannerModel banner;
+  final List<BannerElement> banner;
 
   var selectedIndex = ValueNotifier<int>(0);
 
@@ -29,7 +29,7 @@ class HomeBannerWidget extends StatelessWidget {
             width: double.infinity,
             height: 160.h,
             child: PageView.builder(
-              itemCount: banner.banners.length,
+              itemCount: banner.length,
               onPageChanged: (postionIndex) =>
                   selectedIndex.value = postionIndex,
               itemBuilder: (context, index) {
@@ -40,19 +40,16 @@ class HomeBannerWidget extends StatelessWidget {
                       Navigator.pushNamed(
                         context,
                         Routes.discount,
-                        arguments: banner.banners[index],
+                        arguments: banner[index],
                       );
                     },
                     child: Hero(
                       tag: "discount",
-                      child: Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(16.r),
-                          image: DecorationImage(
-                              image: NetworkImage(
-                                banner.banners[index].image,
-                              ),
-                              fit: BoxFit.cover),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(16.r),
+                        child: CachedNetworkImage(
+                          imageUrl: banner[index].image,
+                          fit: BoxFit.cover,
                         ),
                       ),
                     ),
@@ -66,7 +63,7 @@ class HomeBannerWidget extends StatelessWidget {
               builder: (context, value, child) {
                 return Wrap(
                   children: List.generate(
-                    banner.banners.length,
+                    banner.length,
                     (index) => AnimatedContainer(
                       duration: const Duration(milliseconds: 1000),
                       child: Container(

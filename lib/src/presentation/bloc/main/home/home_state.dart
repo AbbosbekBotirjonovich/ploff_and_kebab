@@ -27,15 +27,6 @@ class SuccessMobileAppState extends HomeState {
   List<Object?> get props => [mobile];
 }
 
-class SuccessCategoryProduct extends HomeState {
-  final CategoryProductModel product;
-
-  const SuccessCategoryProduct({required this.product});
-
-  @override
-  List<Object?> get props => [product];
-}
-
 class SuccessDataState extends HomeState {
   final CategoryProductModel product;
   final BannerModel banner;
@@ -49,11 +40,20 @@ class SuccessDataState extends HomeState {
       ];
 }
 
+class SuccessSearchState extends HomeState {
+  final ProductSearchModel searchProduct;
+
+  const SuccessSearchState({required this.searchProduct});
+
+  @override
+  List<Object?> get props => [searchProduct];
+}
+
 class HomeErrorState extends HomeState {
   final String error;
 
   const HomeErrorState({required this.error});
 
   @override
-  List<Object?> get props => [];
+  List<Object?> get props => [error];
 }

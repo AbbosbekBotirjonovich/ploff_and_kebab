@@ -20,9 +20,9 @@ class ProductAppBarIcons extends StatelessWidget {
           child: Container(
             width: 40.w,
             height: 40.h,
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
               shape: BoxShape.circle,
-              color: AppColor.white.withOpacity(0.8),
+              color: AppColor.cF5F5F5,
             ),
             child: const Center(
               child: Icon(
@@ -36,9 +36,9 @@ class ProductAppBarIcons extends StatelessWidget {
         Container(
           width: 40.w,
           height: 40.h,
-          decoration: BoxDecoration(
+          decoration: const BoxDecoration(
             shape: BoxShape.circle,
-            color: AppColor.white.withOpacity(0.8),
+            color: AppColor.cF5F5F5,
           ),
           child: const Center(
             child: Icon(

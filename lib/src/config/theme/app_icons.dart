@@ -29,5 +29,6 @@ sealed class AppIcons {
   static const String icChef = 'assets/svg/ic_chef.svg';
   static const String icCheck = 'assets/svg/ic_check.svg';
   static const String icEdit = 'assets/svg/ic_edit.svg';
+  static const String icPlaceHolder = 'assets/svg/ic_placeholder.svg';
 
 }
