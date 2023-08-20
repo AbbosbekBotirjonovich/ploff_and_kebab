@@ -12,9 +12,7 @@ import 'package:ploff_and_kebab/src/presentation/pages/main/home/widgets/categor
 import 'package:ploff_and_kebab/src/presentation/pages/main/home/widgets/home_app_bar.dart';
 import 'package:ploff_and_kebab/src/presentation/pages/main/home/widgets/home_banner.dart';
 import 'package:ploff_and_kebab/src/presentation/pages/main/home/widgets/home_category_widget.dart';
-import 'package:ploff_and_kebab/src/presentation/pages/main/home/widgets/home_header_widget.dart';
 
-import '../../../../config/router/app_routes.dart';
 import '../../../../config/theme/app_color.dart';
 import '../../../../config/theme/app_icons.dart';
 import '../../../../data/models/home/category_product_model.dart';

@@ -28,19 +28,21 @@ class _SimpleProductPageState extends State<SimpleProductPage>
             return const Center(
               child: CircularProgressIndicator.adaptive(),
             );
-          }
-          else if (state is SimpleProductSuccess) {
+          } else if (state is SimpleProductSuccess) {
             var product = state.product;
             return SimpleProductPageView(
               product: product,
+              bloc: bloc,
             );
-          }
-          else if (state is SimpleWithModifierProductSuccess) {
+          } else if (state is SimpleWithModifierProductSuccess) {
             var product = state.product;
             var modifier = state.modifier;
-            return SimpleWithModifierPage(product: product, modifier: modifier);
-          }
-          else {
+            return SimpleWithModifierPage(
+              product: product,
+              modifier: modifier,
+              bloc: bloc,
+            );
+          } else {
             return const Center(
               child: Text("Error"),
             );

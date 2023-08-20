@@ -28,7 +28,6 @@ class CategoryWithProductItemWidget extends StatelessWidget {
       itemCount: category.products.length,
       itemBuilder: (context, index) {
         var categoryItem = category.products[index];
-        debugPrint("Category Image URL ${categoryItem.image}");
         return InkWell(
           onTap: () {
             if (categoryItem.type == Type.COMBO) {

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:ploff_and_kebab/src/data/models/detail/combo_product_model.dart';
+import 'package:ploff_and_kebab/src/presentation/pages/product_detail/combo/components/radio_button.dart';
 
 import '../../../../../config/theme/app_color.dart';
 import '../../../../../config/theme/my_text_style.dart';
-import '../combo_product_page.dart';
 
 class ComboProductBody extends StatelessWidget {
   const ComboProductBody({super.key, required this.products});
@@ -18,9 +18,9 @@ class ComboProductBody extends StatelessWidget {
       physics: const NeverScrollableScrollPhysics(),
       primary: false,
       padding: EdgeInsets.zero,
-      itemCount: products.groups.length,
+      itemCount: products.groups!.length,
       itemBuilder: (context, index) {
-        var comboProduct = products.groups[index];
+        var comboProduct = products.groups![index];
         return Container(
           width: double.infinity,
           margin: EdgeInsets.only(bottom: 8.h),
@@ -31,7 +31,7 @@ class ComboProductBody extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                comboProduct.title.uz,
+                comboProduct.title!.uz!,
                 style: MyTextStyle.w600.copyWith(
                   color: AppColor.c2B2A28,
                   fontSize: 16.sp,

@@ -34,6 +34,13 @@ class SimpleWithModifierProductSuccess extends SimpleProductState {
       ];
 }
 
+class ProductPriceState extends SimpleProductState{
+  final int price;
+  const ProductPriceState({required this.price});
+  @override
+  List<Object?> get props => [price];
+}
+
 class SimpleProductError extends SimpleProductState {
   final String error;
 

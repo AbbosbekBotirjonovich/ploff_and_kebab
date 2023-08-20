@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter/material.dart';
 import 'package:ploff_and_kebab/src/data/models/detail/combo_product_model.dart';
 import 'package:ploff_and_kebab/src/domain/repositories/detail/product_detail_repository.dart';
 
@@ -14,6 +15,15 @@ class ComboProductBloc extends Bloc<ComboProductEvent, ComboProductState> {
 
   ComboProductBloc(this.repository) : super(ComboProductInitial()) {
     on<GetComboProductEvent>(_getComboProduct);
+  }
+  final ValueNotifier amountPrice = ValueNotifier<int>(1);
+
+  void setAmount(int amount) {
+    amountPrice.value = amount;
+  }
+
+  int getAmount() {
+    return amountPrice.value;
   }
 
   Future<void> _getComboProduct(

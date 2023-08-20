@@ -19,28 +19,15 @@ class ProductSliverAppBar extends StatelessWidget {
       leading: const SizedBox(),
       title: const ProductAppBarIcons(),
       expandedHeight: 240.h,
-      bottom: const PreferredSize(
-          preferredSize: Size.fromHeight(0), child: SizedBox()),
       flexibleSpace: FlexibleSpaceBar(
-        stretchModes: const [
-          StretchMode.zoomBackground,
-          StretchMode.blurBackground,
-          StretchMode.fadeTitle,
-        ],
-        background: ClipRRect(
-          borderRadius: BorderRadius.only(
-            bottomLeft: Radius.circular(20.r),
-            bottomRight: Radius.circular(20.r),
-          ),
-          child: CachedNetworkImage(
-            imageUrl: "${Constants.imgUrl}$imgUrl",
-            fit: BoxFit.cover,
-            placeholder: (context, url) =>
-                SvgPicture.asset(AppIcons.icPlaceHolder),
-            errorWidget: (ctx, url, error) {
-              return SvgPicture.asset(AppIcons.icPlaceHolder);
-            },
-          ),
+        background: CachedNetworkImage(
+          imageUrl: "${Constants.imgUrl}$imgUrl",
+          fit: BoxFit.cover,
+          placeholder: (context, url) =>
+              SvgPicture.asset(AppIcons.icPlaceHolder),
+          errorWidget: (ctx, url, error) {
+            return SvgPicture.asset(AppIcons.icPlaceHolder);
+          },
         ),
       ),
     );

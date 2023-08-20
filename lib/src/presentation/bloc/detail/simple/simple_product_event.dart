@@ -21,3 +21,10 @@ class GetSimpleWithModifierProductEvent extends SimpleProductEvent {
   @override
   List<Object?> get props => [id];
 }
+
+class GetProductPriceEvent extends SimpleProductEvent {
+  final int price;
+  const GetProductPriceEvent({required this.price});
+  @override
+  List<Object?> get props => [price];
+}

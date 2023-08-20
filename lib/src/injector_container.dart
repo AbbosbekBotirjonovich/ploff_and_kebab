@@ -10,6 +10,7 @@ import 'package:hive/hive.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:ploff_and_kebab/src/config/router/app_routes.dart';
+import 'package:ploff_and_kebab/src/data/models/favourite/favourite_product_model.dart';
 import 'package:ploff_and_kebab/src/data/source/local_source.dart';
 import 'package:ploff_and_kebab/src/domain/repositories/auth/auth_repository.dart';
 import 'package:ploff_and_kebab/src/domain/repositories/detail/product_detail_repository.dart';
@@ -173,8 +174,9 @@ void authFeature() {
 }
 
 Future<void> initHive() async {
-  const boxName = 'bloc_mobile_box';
+  const boxName = 'ploff_and_kebab_box';
   final Directory directory = await getApplicationDocumentsDirectory();
   Hive.init(directory.path);
+  Hive.registerAdapter(FavouriteProductModelAdapter());
   _box = await Hive.openBox<dynamic>(boxName);
 }
