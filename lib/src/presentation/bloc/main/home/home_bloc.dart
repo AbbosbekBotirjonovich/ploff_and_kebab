@@ -17,12 +17,22 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
 
   final isNoResult = ValueNotifier<bool>(false);
   final isHasCancel = ValueNotifier<bool>(false);
+  final List<Category> newProducts = [];
+  final updateProduct = ValueNotifier<int>(0);
 
   HomeBloc(this.repository) : super(const HomeInitialState()) {
     on<GetMobileApp>(_getMobileApp);
     on<GetCategoryEvent>(_getCategory);
     on<GetSearchEvent>(_getSearch);
-    on<GetClearSearchData>(clearData);
+  }
+
+  void setUpdateProductList(bool isActive, Category category){
+    if(isActive){
+      newProducts.add(category);
+    }else{
+      newProducts.remove(category);
+    }
+    updateProduct.value = newProducts.length;
   }
 
   Future<void> _getMobileApp(
@@ -84,10 +94,5 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
         );
       },
     );
-  }
-
-  Future<void> clearData(GetClearSearchData event, Emitter<HomeState> emit) async {
-    ProductSearchModel res = ProductSearchModel(products: [], count: "");
-    emit(SuccessSearchState(searchProduct: res));
   }
 }

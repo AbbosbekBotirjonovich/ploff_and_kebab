@@ -11,8 +11,12 @@ import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:ploff_and_kebab/src/config/router/app_routes.dart';
 import 'package:ploff_and_kebab/src/data/models/favourite/favourite_product_model.dart';
+import 'package:ploff_and_kebab/src/data/source/favourite_product_source.dart';
+import 'package:ploff_and_kebab/src/data/source/favourite_product_source_impl.dart';
 import 'package:ploff_and_kebab/src/data/source/local_source.dart';
 import 'package:ploff_and_kebab/src/domain/repositories/auth/auth_repository.dart';
+import 'package:ploff_and_kebab/src/domain/repositories/cart/product_cart_repository.dart';
+import 'package:ploff_and_kebab/src/domain/repositories/cart/product_cart_repository_impl.dart';
 import 'package:ploff_and_kebab/src/domain/repositories/detail/product_detail_repository.dart';
 import 'package:ploff_and_kebab/src/domain/repositories/detail/product_detail_repository_impl.dart';
 import 'package:ploff_and_kebab/src/domain/repositories/home/home_repository.dart';
@@ -21,8 +25,8 @@ import 'package:ploff_and_kebab/src/domain/repositories/register/register_reposi
 import 'package:ploff_and_kebab/src/presentation/bloc/auth/auth_bloc.dart';
 import 'package:ploff_and_kebab/src/presentation/bloc/auth/register/register_bloc.dart';
 import 'package:ploff_and_kebab/src/presentation/bloc/detail/combo/combo_product_bloc.dart';
-import 'package:ploff_and_kebab/src/presentation/bloc/detail/modifier/modifier_product_bloc.dart';
 import 'package:ploff_and_kebab/src/presentation/bloc/detail/simple/simple_product_bloc.dart';
+import 'package:ploff_and_kebab/src/presentation/bloc/main/cart/cart_bloc.dart';
 import 'package:ploff_and_kebab/src/presentation/bloc/main/main_bloc.dart';
 import 'package:ploff_and_kebab/src/presentation/bloc/splash/splash_bloc.dart';
 
@@ -34,10 +38,12 @@ import 'presentation/bloc/main/home/home_bloc.dart';
 
 final sl = GetIt.instance;
 late Box<dynamic> _box;
+late Box<FavouriteProductModel> _boxProduct;
 
 Future<void> init() async {
   /// External
   await initHive();
+  await initProductHive();
 
   sl.registerLazySingleton(
     () => Dio()
@@ -87,11 +93,15 @@ Future<void> init() async {
   sl
     ..registerLazySingleton(InternetConnectionChecker.new)
     ..registerLazySingleton<NetworkInfo>(() => NetworkInfoImpl(sl()))
-    ..registerSingleton<LocalSource>(LocalSource(_box));
+    ..registerSingleton<LocalSource>(LocalSource(_box))
+    ..registerSingleton<FavouriteProductSource>(
+      FavouriteProductSourceImpl(box: _boxProduct),
+    );
 
   /// main
   mainFeature();
   homeFeature();
+  cartFeature();
 
   ///detail
   detailFeature();
@@ -120,6 +130,17 @@ void homeFeature() {
     );
 }
 
+void cartFeature() {
+  sl
+    ..registerFactory<CartBloc>(() => CartBloc(sl()))
+    ..registerLazySingleton<CartRepository>(
+      () => CartRepositoryImpl(
+        dio: sl(),
+        networkInfo: sl(),
+      ),
+    );
+}
+
 void detailFeature() {
   sl
     ..registerFactory<SimpleProductBloc>(
@@ -140,11 +161,6 @@ void detailFeature() {
   );
   sl.registerFactory<ComboProductBloc>(
     () => ComboProductBloc(
-      sl(),
-    ),
-  );
-  sl.registerFactory<ModifierProductBloc>(
-    () => ModifierProductBloc(
       sl(),
     ),
   );
@@ -177,6 +193,14 @@ Future<void> initHive() async {
   const boxName = 'ploff_and_kebab_box';
   final Directory directory = await getApplicationDocumentsDirectory();
   Hive.init(directory.path);
-  Hive.registerAdapter(FavouriteProductModelAdapter());
   _box = await Hive.openBox<dynamic>(boxName);
+}
+
+Future<void> initProductHive() async {
+  const boxName = 'favourite_product_box';
+  final Directory directory = await getApplicationDocumentsDirectory();
+  Hive.init(directory.path);
+  Hive.registerAdapter(FavouriteProductModelAdapter());
+  Hive.registerAdapter(FavouriteDescriptionAdapter());
+  _boxProduct = await Hive.openBox<FavouriteProductModel>(boxName);
 }

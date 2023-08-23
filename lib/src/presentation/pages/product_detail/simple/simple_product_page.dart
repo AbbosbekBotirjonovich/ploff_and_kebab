@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ploff_and_kebab/src/config/theme/app_color.dart';
 import 'package:ploff_and_kebab/src/data/models/home/category_product_model.dart';
 import 'package:ploff_and_kebab/src/presentation/bloc/detail/simple/simple_product_bloc.dart';
+import 'package:ploff_and_kebab/src/presentation/pages/product_detail/components/product_detail_initial_widget.dart';
 import 'package:ploff_and_kebab/src/presentation/pages/product_detail/simple/components/simple_product_page_view.dart';
 import 'package:ploff_and_kebab/src/presentation/pages/product_detail/simple/components/simple_with_modifier_page.dart';
 import 'package:ploff_and_kebab/src/presentation/pages/product_detail/simple/mixin/simple_product_mixin.dart';
@@ -25,9 +26,7 @@ class _SimpleProductPageState extends State<SimpleProductPage>
       body: BlocBuilder<SimpleProductBloc, SimpleProductState>(
         builder: (context, state) {
           if (state is SimpleProductInitial) {
-            return const Center(
-              child: CircularProgressIndicator.adaptive(),
-            );
+            return ProductDetailInitialWidget(product: widget.product);
           } else if (state is SimpleProductSuccess) {
             var product = state.product;
             return SimpleProductPageView(

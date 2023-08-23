@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:ploff_and_kebab/src/core/extension/extension.dart';
 import 'package:ploff_and_kebab/src/data/models/detail/simple_product_model.dart';
 import 'package:ploff_and_kebab/src/presentation/bloc/detail/simple/simple_product_bloc.dart';
 import 'package:ploff_and_kebab/src/presentation/components/extensions/number_format.dart';
@@ -8,7 +10,10 @@ import 'package:ploff_and_kebab/src/presentation/pages/product_detail/components
 
 import '../../../../../config/theme/app_color.dart';
 import '../../../../../config/theme/my_text_style.dart';
+import '../../../../../data/models/favourite/favourite_product_model.dart';
+import '../../../../bloc/main/main_bloc.dart';
 import '../../../../components/buttons/bouncing_button.dart';
+import '../../../../components/toast/show_toast.dart';
 
 class SimpleProductPageView extends StatelessWidget {
   const SimpleProductPageView(
@@ -20,6 +25,7 @@ class SimpleProductPageView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     bloc.addPrice(product.outPrice!);
+    bloc.hasProductCheck(product.id!);
     return Stack(
       children: [
         CustomScrollView(
@@ -100,8 +106,7 @@ class SimpleProductPageView extends StatelessWidget {
                             ),
                           ),
                           Text(
-                            NumberFormatExtension("${bloc.getSumPrice()}")
-                                .formatWithThousandsSeparator(),
+                            "${NumberFormatExtension("${bloc.getSumPrice()}").formatWithThousandsSeparator()} ${product.currency}",
                             style: MyTextStyle.w600.copyWith(
                               color: AppColor.black,
                               fontSize: 18.sp,
@@ -113,16 +118,53 @@ class SimpleProductPageView extends StatelessWidget {
                 SizedBox(
                   width: double.infinity,
                   height: 52.h,
-                  child: ElevatedButton(
-                    onPressed: () {},
-                    child: Text(
-                      "Добавить в корзину",
-                      style: MyTextStyle.w600.copyWith(
-                        color: AppColor.black,
-                        fontSize: 16.sp,
-                      ),
-                    ),
-                  ),
+                  child: ValueListenableBuilder(
+                      valueListenable: bloc.hasProduct,
+                      builder: (context, count, _) {
+                        return ElevatedButton(
+                          onPressed: () {
+                            if (bloc.hasProduct.value) {
+                              context
+                                  .read<MainBloc>()
+                                  .add(const MainEventChanged(BottomMenu.cart));
+                              Navigator.pop(context);
+                            } else {
+                              bloc.setFavourite(
+                                FavouriteProductModel(
+                                  id: product.id,
+                                  image: product.image,
+                                  title: FavouriteDescription(
+                                    uz: product.title?.uz,
+                                    ru: product.title?.ru,
+                                    en: product.title?.en,
+                                  ),
+                                  description: FavouriteDescription(
+                                    uz: product.description?.uz,
+                                    ru: product.description?.ru,
+                                    en: product.description?.en,
+                                  ),
+                                  price: bloc.getSumPrice(),
+                                  outPrice: product.outPrice,
+                                  count: bloc.getAmount(),
+                                ),
+                              );
+                              showStyleToast(
+                                  context, context.tr('toast_title'));
+                            }
+                            context.read<MainBloc>().productCount.value =
+                                bloc.getAllProducts().length;
+                          },
+                          child: Text(
+                            bloc.hasProduct.value
+                                ? context.tr('cart')
+                                : context.tr('add_to_cart'),
+                            style: MyTextStyle.w600.copyWith(
+                              color: AppColor.black,
+                              fontSize: 16.sp,
+                            ),
+                          ),
+                        );
+                      }),
                 ),
               ],
             ),

@@ -87,7 +87,7 @@ class ProductDetailRepositoryImpl implements ProductDetailRepository {
     if (await networkInfo.isConnected) {
       try {
         final Response response = await dio.get(
-          "${Constants.baseUrl}${Urls.simple}/$id/variants",
+          "${Constants.baseUrl}${Urls.simple}/$id",
           options: Options(headers: {
             'Shipper': Constants.shipper,
           }),

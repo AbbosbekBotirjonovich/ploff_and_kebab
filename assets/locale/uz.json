@@ -56,5 +56,8 @@
   "pickup" : "Olib Ketish",
   "delivery_address" : "Yetkazib berish manzili",
   "current_address" : "Joriy Manzil",
-  "my_address" : "Mening Manzilim"
+  "my_address" : "Mening Manzilim",
+  "empty_product" : "Bu opsiyali maxsulot mavjud emas, boshqa opsiya tanlang!",
+  "add_to_cart" : "Savatga Qo'shish",
+  "toast_title" : "Buyurtmangiz savatga qo'shildi"
 }

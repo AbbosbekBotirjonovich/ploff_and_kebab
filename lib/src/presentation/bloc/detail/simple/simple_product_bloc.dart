@@ -1,23 +1,39 @@
 import 'dart:async';
-import 'dart:ffi';
-
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:ploff_and_kebab/src/core/mixin/favourite_product_mixin.dart';
 import 'package:ploff_and_kebab/src/data/models/detail/modifier_product_model.dart';
 import 'package:ploff_and_kebab/src/data/models/detail/simple_product_model.dart';
+import 'package:ploff_and_kebab/src/data/models/favourite/favourite_product_model.dart';
 import 'package:ploff_and_kebab/src/domain/repositories/detail/product_detail_repository.dart';
 
 part 'simple_product_event.dart';
 
 part 'simple_product_state.dart';
 
-class SimpleProductBloc extends Bloc<SimpleProductEvent, SimpleProductState> {
+class SimpleProductBloc extends Bloc<SimpleProductEvent, SimpleProductState> with FavouriteProduct {
   final ProductDetailRepository repository;
 
   final ValueNotifier priceValue = ValueNotifier<int>(0);
   final ValueNotifier amountPrice = ValueNotifier<int>(1);
+  final ValueNotifier hasProduct = ValueNotifier<bool>(false);
+
+  void setFavourite(FavouriteProductModel product){
+    addProduct(product: product);
+    hasProduct.value = true;
+  }
+
+  void hasProductCheck(String id) {
+    for (var value in getAllProducts()) {
+      if(id == value.id){
+        hasProduct.value = true;
+        break;
+      }else{
+        hasProduct.value = false;
+      }
+    }
+  }
 
   void setAmount(int amount) {
     amountPrice.value = amount;

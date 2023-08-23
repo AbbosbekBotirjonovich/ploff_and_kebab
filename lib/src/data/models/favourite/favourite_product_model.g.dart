@@ -19,8 +19,8 @@ class FavouriteProductModelAdapter extends TypeAdapter<FavouriteProductModel> {
     return FavouriteProductModel(
       id: fields[0] as String?,
       image: fields[1] as String?,
-      title: fields[2] as Description?,
-      description: fields[3] as Description?,
+      title: fields[2] as FavouriteDescription?,
+      description: fields[3] as FavouriteDescription?,
       price: fields[4] as int?,
       outPrice: fields[5] as int?,
       count: fields[6] as int?,
@@ -58,17 +58,17 @@ class FavouriteProductModelAdapter extends TypeAdapter<FavouriteProductModel> {
           typeId == other.typeId;
 }
 
-class DescriptionAdapter extends TypeAdapter<Description> {
+class FavouriteDescriptionAdapter extends TypeAdapter<FavouriteDescription> {
   @override
   final int typeId = 1;
 
   @override
-  Description read(BinaryReader reader) {
+  FavouriteDescription read(BinaryReader reader) {
     final numOfFields = reader.readByte();
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    return Description(
+    return FavouriteDescription(
       uz: fields[0] as String?,
       ru: fields[1] as String?,
       en: fields[2] as String?,
@@ -76,7 +76,7 @@ class DescriptionAdapter extends TypeAdapter<Description> {
   }
 
   @override
-  void write(BinaryWriter writer, Description obj) {
+  void write(BinaryWriter writer, FavouriteDescription obj) {
     writer
       ..writeByte(3)
       ..writeByte(0)
@@ -93,7 +93,7 @@ class DescriptionAdapter extends TypeAdapter<Description> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is DescriptionAdapter &&
+      other is FavouriteDescriptionAdapter &&
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }

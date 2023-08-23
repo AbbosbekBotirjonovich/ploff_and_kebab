@@ -14,4 +14,6 @@ sealed class AppKeys {
   static const String login = 'login';
   static const String email = 'email';
   static const String langSelected = 'email';
+  static const String favouriteProduct = 'favourite';
+  static const String product = 'product';
 }

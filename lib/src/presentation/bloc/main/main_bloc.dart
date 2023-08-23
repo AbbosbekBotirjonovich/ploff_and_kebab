@@ -1,11 +1,16 @@
 import 'package:equatable/equatable.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:ploff_and_kebab/src/core/mixin/favourite_product_mixin.dart';
 
 part 'main_state.dart';
 
 part 'main_event.dart';
 
-class MainBloc extends Bloc<MainEvent, MainState> {
+class MainBloc extends Bloc<MainEvent, MainState> with FavouriteProduct{
+
+  final productCount = ValueNotifier<int>(0);
+
   MainBloc() : super(const MainState()) {
     on<MainEventChanged>(_onChangeMenu);
   }
@@ -16,8 +21,8 @@ class MainBloc extends Bloc<MainEvent, MainState> {
 }
 
 enum BottomMenu {
-  search,
+  home,
+  cart,
   orders,
-  favorites,
   profile,
 }

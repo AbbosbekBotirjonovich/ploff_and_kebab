@@ -84,6 +84,7 @@ class _HomeHeaderWidgetState extends State<HomeHeaderWidget> {
               height: 44.h,
               child: HomeCategoryWidget(
                 category: widget.category,
+                bloc: bloc,
               ),
             )
           ],
@@ -91,6 +92,7 @@ class _HomeHeaderWidgetState extends State<HomeHeaderWidget> {
       ),
     );
   }
+
   _onSearchChanged(String val) {
     if (_debounce?.isActive ?? false) _debounce?.cancel();
     _debounce = Timer(const Duration(milliseconds: 300), () {

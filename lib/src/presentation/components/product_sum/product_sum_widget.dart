@@ -43,6 +43,10 @@ class ProductSumWidget extends StatelessWidget {
                   if (countProduct.value > minAmount) {
                     --countProduct.value;
                     removeCallback(countProduct.value);
+                  }else if(countProduct.value == minAmount){
+                    --countProduct.value;
+                    removeCallback(countProduct.value);
+                    ++countProduct.value;
                   }
                 },
                 child: const Icon(

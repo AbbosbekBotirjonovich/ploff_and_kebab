@@ -25,7 +25,7 @@ class _RegisterPageState extends State<RegisterPage> with RegisterMixin {
             localSource.setHasProfile(value: true);
             context
                 .read<MainBloc>()
-                .add(const MainEventChanged(BottomMenu.search));
+                .add(const MainEventChanged(BottomMenu.home));
             Navigator.pushNamedAndRemoveUntil(
               context,
               Routes.main,

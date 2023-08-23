@@ -3,13 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:ploff_and_kebab/src/config/theme/app_icons.dart';
-import 'package:ploff_and_kebab/src/config/theme/app_images.dart';
 
 import '../../../../../config/router/app_routes.dart';
 import '../../../../../config/theme/app_color.dart';
 import '../../../../../config/theme/my_text_style.dart';
 import '../../../../../core/constants/constants.dart';
 import '../../../../../data/models/home/category_product_model.dart';
+
 
 class CategoryWithProductItemWidget extends StatelessWidget {
   const CategoryWithProductItemWidget({
@@ -36,6 +36,10 @@ class CategoryWithProductItemWidget extends StatelessWidget {
             }
             if (categoryItem.type == Type.SIMPLE) {
               Navigator.pushNamed(context, Routes.simpleProduct,
+                  arguments: categoryItem);
+            }
+            if (categoryItem.type == Type.ORIGIN) {
+              Navigator.pushNamed(context, Routes.originProduct,
                   arguments: categoryItem);
             }
           },

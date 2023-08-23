@@ -56,5 +56,8 @@
   "pickup" : "Pickup",
   "delivery_address" : "Delivery Address",
   "current_address" : "Current Address",
-  "my_address" : "My Address"
+  "my_address" : "My Address",
+  "empty_product" : "This optional product is not available, choose another option!",
+  "add_to_cart" : "Add to Cart",
+  "toast_title" : "Your order has been added to the cart"
 }
