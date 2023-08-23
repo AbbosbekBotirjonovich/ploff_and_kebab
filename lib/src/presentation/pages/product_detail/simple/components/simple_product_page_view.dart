@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:ploff_and_kebab/src/core/extension/extension.dart';
 import 'package:ploff_and_kebab/src/data/models/detail/simple_product_model.dart';
 import 'package:ploff_and_kebab/src/presentation/bloc/detail/simple/simple_product_bloc.dart';
+import 'package:ploff_and_kebab/src/presentation/bloc/main/cart/cart_bloc.dart';
 import 'package:ploff_and_kebab/src/presentation/components/extensions/number_format.dart';
 import 'package:ploff_and_kebab/src/presentation/pages/product_detail/components/product_desc_widget.dart';
 import 'package:ploff_and_kebab/src/presentation/pages/product_detail/components/product_sliver_app_bar.dart';
@@ -119,52 +120,52 @@ class SimpleProductPageView extends StatelessWidget {
                   width: double.infinity,
                   height: 52.h,
                   child: ValueListenableBuilder(
-                      valueListenable: bloc.hasProduct,
-                      builder: (context, count, _) {
-                        return ElevatedButton(
-                          onPressed: () {
-                            if (bloc.hasProduct.value) {
-                              context
-                                  .read<MainBloc>()
-                                  .add(const MainEventChanged(BottomMenu.cart));
-                              Navigator.pop(context);
-                            } else {
-                              bloc.setFavourite(
-                                FavouriteProductModel(
-                                  id: product.id,
-                                  image: product.image,
-                                  title: FavouriteDescription(
-                                    uz: product.title?.uz,
-                                    ru: product.title?.ru,
-                                    en: product.title?.en,
-                                  ),
-                                  description: FavouriteDescription(
-                                    uz: product.description?.uz,
-                                    ru: product.description?.ru,
-                                    en: product.description?.en,
-                                  ),
-                                  price: bloc.getSumPrice(),
-                                  outPrice: product.outPrice,
-                                  count: bloc.getAmount(),
+                    valueListenable: bloc.hasProduct,
+                    builder: (context, count, _) {
+                      return ElevatedButton(
+                        onPressed: () {
+                          if (bloc.hasProduct.value) {
+                            context
+                                .read<MainBloc>()
+                                .add(const MainEventChanged(BottomMenu.cart));
+                            Navigator.pop(context);
+                          } else {
+                            bloc.setFavourite(
+                              FavouriteProductModel(
+                                id: product.id,
+                                image: product.image,
+                                title: FavouriteDescription(
+                                  uz: product.title?.uz,
+                                  ru: product.title?.ru,
+                                  en: product.title?.en,
                                 ),
-                              );
-                              showStyleToast(
-                                  context, context.tr('toast_title'));
-                            }
-                            context.read<MainBloc>().productCount.value =
-                                bloc.getAllProducts().length;
-                          },
-                          child: Text(
-                            bloc.hasProduct.value
-                                ? context.tr('cart')
-                                : context.tr('add_to_cart'),
-                            style: MyTextStyle.w600.copyWith(
-                              color: AppColor.black,
-                              fontSize: 16.sp,
-                            ),
+                                description: FavouriteDescription(
+                                  uz: product.description?.uz,
+                                  ru: product.description?.ru,
+                                  en: product.description?.en,
+                                ),
+                                price: bloc.getSumPrice(),
+                                outPrice: product.outPrice,
+                                count: bloc.getAmount(),
+                              ),
+                            );
+                            showStyleToast(context, context.tr('toast_title'));
+                          }
+                          context.read<MainBloc>().productCount.value =
+                              bloc.getAllProducts().length;
+                        },
+                        child: Text(
+                          bloc.hasProduct.value
+                              ? context.tr('cart')
+                              : context.tr('add_to_cart'),
+                          style: MyTextStyle.w600.copyWith(
+                            color: AppColor.black,
+                            fontSize: 16.sp,
                           ),
-                        );
-                      }),
+                        ),
+                      );
+                    },
+                  ),
                 ),
               ],
             ),

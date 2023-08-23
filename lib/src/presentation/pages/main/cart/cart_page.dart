@@ -23,12 +23,6 @@ class CartPage extends StatelessWidget {
           }
         },
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          bloc.add(GetCartProductEvent());
-        },
-        child: const Icon(Icons.sync),
-      ),
     );
   }
 }

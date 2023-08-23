@@ -37,7 +37,6 @@ class _HomePageState extends State<HomePage>
               }
               if (state is SuccessSearchState) {
                 return HomePageView(
-                  isSearchView: true,
                   bloc: bloc,
                   searchModel: state.searchProduct,
                 );

@@ -17,7 +17,7 @@ import '../../../../components/buttons/bouncing_button.dart';
 import '../../../../components/product_sum/product_sum_widget.dart';
 
 class CartItemWidget extends StatelessWidget {
-  const CartItemWidget({
+  CartItemWidget({
     super.key,
     required this.product,
     required this.bloc,
@@ -25,6 +25,8 @@ class CartItemWidget extends StatelessWidget {
 
   final FavouriteProductModel product;
   final CartBloc bloc;
+
+  int amount = 1;
 
   @override
   Widget build(BuildContext context) {
@@ -85,6 +87,7 @@ class CartItemWidget extends StatelessWidget {
                                   bloc.add(GetCartProductEvent());
                                   context.read<MainBloc>().productCount.value =
                                       bloc.getAllProducts().length;
+                                  bloc.removePrice(amount * product.price!);
                                   Navigator.pop(context);
                                 },
                                 negativeCallback: () {
@@ -98,7 +101,7 @@ class CartItemWidget extends StatelessWidget {
                       Row(
                         children: [
                           Text(
-                            NumberFormatExtension("${product.price}")
+                            NumberFormatExtension("${product.outPrice}")
                                 .formatWithThousandsSeparator(),
                             style: MyTextStyle.w600.copyWith(
                               color: AppColor.c2B2A28,
@@ -109,9 +112,14 @@ class CartItemWidget extends StatelessWidget {
                           ProductSumWidget(
                             minAmount: 1,
                             maxAmount: 100,
-                            addCallback: (value) {},
+                            addCallback: (value) {
+                              amount = value;
+                              bloc.addPrice(product.price!);
+                            },
                             removeCallback: (value) {
+                              amount = value;
                               if (value == 0) {
+                                amount = 1;
                                 showAlertDialog(
                                   context: context,
                                   title: "Diqqat!",
@@ -124,12 +132,15 @@ class CartItemWidget extends StatelessWidget {
                                         .read<MainBloc>()
                                         .productCount
                                         .value = bloc.getAllProducts().length;
+                                    bloc.removePrice(product.price!);
                                     Navigator.pop(context);
                                   },
                                   negativeCallback: () {
                                     Navigator.pop(context);
                                   },
                                 );
+                              }else{
+                                bloc.removePrice(product.price!);
                               }
                             },
                             height: 36.h,

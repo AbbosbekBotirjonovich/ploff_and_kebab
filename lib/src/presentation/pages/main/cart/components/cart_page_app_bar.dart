@@ -40,8 +40,8 @@ class CartPageAppBar extends StatelessWidget implements PreferredSizeWidget {
                 title: "Diqqat!",
                 content: "Haqiqatdan ham savatchani bo'shatmoqchimisiz?",
                 positiveCallback: () {
-                  bloc.deleteAll();
                   bloc.add(GetCartProductEvent());
+                  bloc.deleteAll();
                   context.read<MainBloc>().productCount.value =
                       bloc.getAllProducts().length;
                   Navigator.pop(context);

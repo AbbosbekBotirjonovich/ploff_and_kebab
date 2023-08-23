@@ -5,6 +5,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:ploff_and_kebab/src/config/theme/app_icons.dart';
 import 'package:ploff_and_kebab/src/config/theme/my_text_style.dart';
 import 'package:ploff_and_kebab/src/core/extension/extension.dart';
+import 'package:ploff_and_kebab/src/presentation/bloc/main/cart/cart_bloc.dart';
 import 'package:ploff_and_kebab/src/presentation/bloc/main/main_bloc.dart';
 
 import '../../../../../config/theme/app_color.dart';
